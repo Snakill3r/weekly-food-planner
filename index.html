@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="description" content="گھریلو کھانوں کا ہفتہ وار پلانر، ہسٹری اور بیک اپ کے ساتھ">
+  <title>ہفتہ وار کھانا پلانر</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:light;--teal:#0f766e;--teal2:#115e59;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;--bg:#f1f5f9}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Arabic",Tahoma,sans-serif;-webkit-tap-highlight-color:transparent}
+    button,input{font:inherit} button{cursor:pointer}
+    .app{max-width:520px;min-height:100dvh;margin:auto;background:white;box-shadow:0 8px 35px #0f172a12;position:relative;padding-bottom:82px}
+    header{position:sticky;top:0;z-index:5;color:white;padding:16px;background:linear-gradient(110deg,#0f766e,#115e59,#064e3b);box-shadow:0 4px 12px #0f172a20}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:23px}
+    h1{font-family:"Noto Nastaliq Urdu",serif;font-size:19px;margin:0;line-height:1.8} .sub{font-size:11px;color:#ccfbf1}
+    .head-actions{display:flex;gap:6px}.head-actions button{border:1px solid #ffffff30;background:#ffffff18;color:white;border-radius:10px;padding:8px 9px;font-size:11px}
+    .days{display:flex;gap:7px;overflow:auto;padding:12px 0 2px;scrollbar-width:none}.days::-webkit-scrollbar{display:none}
+    .day-pill{white-space:nowrap;border:1px solid #ffffff35;background:#ffffff16;color:white;border-radius:12px;padding:7px 11px;font-size:12px;display:flex;gap:7px;align-items:center}
+    .day-pill.active{background:white;color:#134e4a;font-weight:800}.count{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#ffffff30;font-size:10px}.active .count{background:#0f766e;color:white}
+    main{padding:16px}.day-card{background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border:1px solid #ccfbf1;border-radius:18px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:18px}
+    .day-title{font-family:"Noto Nastaliq Urdu",serif;font-size:23px;color:#134e4a;margin:0}.tag{font-size:10px;background:#0f766e;color:white;padding:3px 9px;border-radius:20px;display:inline-block}.theme{font-size:11px;color:#64748b;margin-top:3px}
+    .remain{background:white;border:1px solid #ccfbf1;border-radius:12px;padding:7px 10px;text-align:center;min-width:75px}.remain small{display:block;color:#64748b;font-size:10px}.remain strong{color:#0f766e;font-size:17px}
+    .section{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 2px 10px}.section h2{font-size:13px;margin:0}.link{border:0;background:none;color:#0f766e;font-size:11px;font-weight:700;padding:5px}
+    .options{display:grid;gap:10px}.dish{border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 2px 5px #0f172a06}
+    .dish-main{display:flex;align-items:center;gap:10px;min-width:0}.dish-icon{width:42px;height:42px;border-radius:12px;background:#f0fdfa;color:#0f766e;display:grid;place-items:center;font-size:21px;flex-shrink:0}.dish h3{font-size:14px;margin:0;line-height:1.7}.dish small{font-size:10px;color:#64748b}.mandatory{font-size:9px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 6px;border-radius:6px;margin-right:4px}
+    .cook{border:0;background:#0d9488;color:white;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:700;white-space:nowrap}.cook:active,.primary:active{transform:scale(.97)}
+    .done{display:none;text-align:center;padding:25px 15px;border:1px solid #a7f3d0;background:#ecfdf5;border-radius:20px}.done.show{display:block}.done .big{font-size:35px}.done h3{font-family:"Noto Nastaliq Urdu",serif;color:#065f46;margin:4px}
+    nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:flex;justify-content:space-around;background:#ffffffed;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:8}
+    nav button{border:0;background:none;color:#64748b;font-size:10px;display:grid;gap:3px;justify-items:center;padding:3px 8px}nav button.active{color:#0f766e;font-weight:800}nav .ico{font-size:18px}
+    .modal{position:fixed;inset:0;background:#0f172a99;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:12px}.modal.show{display:flex}.panel{width:min(500px,100%);max-height:88dvh;overflow:auto;background:white;border-radius:22px;padding:18px;box-shadow:0 20px 60px #0003}.panel-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}.panel h2{font-size:16px;margin:0}.close{border:0;background:#f1f5f9;border-radius:9px;padding:6px 10px}.muted{color:var(--muted);font-size:11px;line-height:1.8}.btn-row{display:flex;gap:8px;margin-top:14px}.btn-row button,.primary,.secondary,.danger{border:0;border-radius:11px;padding:10px 13px;font-size:12px;font-weight:700;flex:1}.primary{background:#0f766e;color:white}.secondary{background:#f1f5f9;color:#334155}.danger{background:#e11d48;color:white}
+    .history-day,.week-day{padding:11px;border:1px solid var(--line);border-radius:13px;background:#f8fafc;margin-bottom:9px}.history-day strong,.week-day strong{font-size:12px;color:#115e59}.history-day ul{margin:7px 0 0;padding-right:20px;font-size:11px;line-height:2}.week-day p{font-size:11px;color:#475569;margin:5px 0 0;line-height:1.8}
+    .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#0f172a;color:white;padding:10px 15px;border-radius:30px;font-size:11px;z-index:40;opacity:0;pointer-events:none;transition:.2s;max-width:90%;text-align:center}.toast.show{opacity:1}
+    .field{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:white;font-size:12px}.install-note{padding:10px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;margin-top:10px}
+    @media(min-width:600px){.modal{align-items:center}.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+  </style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div class="brand"><div class="logo">🍲</div><div><h1>ہفتہ وار کھانا پلانر</h1><div class="sub">منظم مینو، محفوظ ہسٹری اور آسان انتخاب</div></div></div>
+    <div class="head-actions"><button id="installBtn" hidden>⬇ انسٹال</button><button id="historyTop">ریکارڈ</button></div>
+  </div>
+  <div class="days" id="daysNav"></div>
+</header>
+<main>
+  <section class="day-card">
+    <div><span class="tag" id="dayBadge">آج</span><h2 class="day-title" id="dayName">پیر</h2><div class="theme" id="dayTheme"></div></div>
+    <div class="remain"><small>باقی آپشنز</small><strong id="remaining">4 / 4</strong></div>
+  </section>
+  <div class="section"><h2>دسترس میں موجود کھانے</h2><button class="link" id="resetDay">↶ یہ دن ری سیٹ کریں</button></div>
+  <div class="options" id="options"></div>
+  <section class="done" id="doneCard"><div class="big">🎉</div><h3>اس دن کے تمام آپشنز استعمال ہو گئے!</h3><p class="muted">اس ہفتے کے لیے اس دن کا مینو مکمل ہے۔ اگلے ہفتے آپشنز خود بخود دوبارہ دستیاب ہوں گے۔</p><button class="secondary" id="doneReset">اس دن کو دوبارہ شروع کریں</button></section>
+</main>
+<nav>
+  <button id="todayTab" class="active"><span class="ico">▦</span>آج کا مینو</button>
+  <button id="weekTab"><span class="ico">▤</span>پورا ہفتہ</button>
+  <button id="historyTab"><span class="ico">◷</span>ہسٹری</button>
+  <button id="backupTab"><span class="ico">⇧</span>بیک اپ</button>
+</nav>
+</div>
+
+<div class="modal" id="confirmModal"><div class="panel">
+  <div class="panel-head"><h2>کیا یہ ڈش پکائی گئی؟</h2><button class="close" data-close="confirmModal">✕</button></div>
+  <p class="muted">تصدیق کے بعد یہ ڈش موجودہ ہفتے اور دن کی دستیاب فہرست سے ہٹ جائے گی۔</p><h3 id="confirmDish" style="color:#0f766e;text-align:center"></h3>
+  <div class="btn-row"><button class="secondary" data-close="confirmModal">منسوخ</button><button class="primary" id="confirmCook">ہاں، پک چکی ہے</button></div>
+</div></div>
+<div class="modal" id="historyModal"><div class="panel">
+  <div class="panel-head"><h2>پکائے گئے کھانوں کی ہسٹری</h2><button class="close" data-close="historyModal">✕</button></div>
+  <div id="historyList"></div><div class="btn-row"><button class="secondary" data-close="historyModal">بند کریں</button></div>
+</div></div>
+<div class="modal" id="weekModal"><div class="panel">
+  <div class="panel-head"><h2>پورے ہفتے کی صورتحال</h2><button class="close" data-close="weekModal">✕</button></div>
+  <div id="weekList"></div><div class="btn-row"><button class="danger" id="resetWeekBtn">پورا ہفتہ ری سیٹ</button><button class="secondary" data-close="weekModal">بند کریں</button></div>
+</div></div>
+<div class="modal" id="resetModal"><div class="panel">
+  <div class="panel-head"><h2>ری سیٹ کی تصدیق</h2><button class="close" data-close="resetModal">✕</button></div>
+  <p class="muted" id="resetText">کیا آپ اس دن کا موجودہ ہفتے والا ریکارڈ ختم کرنا چاہتے ہیں؟</p>
+  <div class="btn-row"><button class="secondary" data-close="resetModal">نہیں</button><button class="danger" id="confirmReset">ہاں، ری سیٹ کریں</button></div>
+</div></div>
+<div class="modal" id="backupModal"><div class="panel">
+  <div class="panel-head"><h2>بیک اپ اور بحالی</h2><button class="close" data-close="backupModal">✕</button></div>
+  <p class="muted">اپنا ریکارڈ JSON فائل میں محفوظ کریں۔ بعد میں اسی فائل سے کسی دوسرے موبائل پر بھی بحال کر سکتے ہیں۔</p>
+  <div class="btn-row"><button class="primary" id="exportBtn">بیک اپ ڈاؤن لوڈ کریں</button><button class="secondary" id="importBtn">بیک اپ بحال کریں</button></div>
+  <input id="importFile" type="file" accept="application/json,.json" hidden>
+  <p class="muted install-note">نوٹ: بیک اپ فائل محفوظ جگہ رکھیں۔ براؤزر کا ڈیٹا صاف ہونے سے پہلے بیک اپ بنا لیں۔</p>
+  <div class="btn-row"><button class="secondary" data-close="backupModal">بند کریں</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const MENU = [
+ {id:"mon",name:"پیر",theme:"روایتی شوربہ / چاول کا امکان",options:[
+  ["mon_1","آلو گوشت (شوربے والا)","گوشت / شوربہ","🍲"],["mon_2","گھیا توری","تازہ سبزی","🥒"],["mon_3","دال مسور","دال","🥣"],["mon_4","تاہری (پیلے چاول)","روایتی چاول","🍚"]]},
+ {id:"tue",name:"منگل",theme:"سبزی و دال (بغیر گوشت / صرف روٹی)",options:[
+  ["tue_1","آلو گوبھی","سبزی","🥦"],["tue_2","آلو مٹر","سبزی","🫛"],["tue_3","دال ماش","ڈھابہ سٹائل دال","🥣"],["tue_4","مکس سبزی (گاجر، مٹر، آلو، گوبھی)","سبزی","🥕"]]},
+ {id:"wed",name:"بدھ",theme:"قیمہ / خشک گوشت (روٹی اسپیشل)",options:[
+  ["wed_1","قیمہ مٹر","قیمہ اسپیشل","🍛"],["wed_2","آلو قیمہ","قیمہ اسپیشل","🍛"],["wed_3","قیمہ کریلے","قیمہ و سبزی","🥬"],["wed_4","آلو انڈے کا شوربہ","ہلکا شوربہ","🥚"]]},
+ {id:"thu",name:"جمعرات",theme:"روایتی دال و سبزی (صرف روٹی)",options:[
+  ["thu_1","دال چنا","جمعرات کی لازمی ڈش","🥣",true],["thu_2","آلو پالک","سبزی","🥬"],["thu_3","کڑھی پکوڑا","روایتی ڈش","🍲"],["thu_4","دال کدو","دال و سبزی","🥣"]]},
+ {id:"fri",name:"جمعہ",theme:"جمعہ اسپیشل (چکن و چاول)",options:[
+  ["fri_1","بریانی یا یخنی پلاؤ","خاص چاول","🍚"],["fri_2","چکن کڑاہی یا چکن ہانڈی","چکن اسپیشل","🍗"],["fri_3","سفید چنے","چنے کا سالن","🫘"],["fri_4","کوفتے","گوشت اسپیشل","🍛"]]},
+ {id:"sat",name:"ہفتہ",theme:"ہلکی دال و سبزی (وقفے کا دن)",options:[
+  ["sat_1","لوبیا (راجما)","دال و اناج","🫘"],["sat_2","ٹینڈے گوشت یا کدو گوشت","گوشت و سبزی","🍲"],["sat_3","کلیجی مصالحہ","اسپیشل","🍛"],["sat_4","پالک گوشت","گوشت و سبزی","🥬"]]},
+ {id:"sun",name:"اتوار",theme:"فیملی ڈے (دیسی مرغی یا پلاؤ ورائٹی)",options:[
+  ["sun_1","دیسی مرغی کا شوربہ","روایتی یخنی شوربہ","🍲"],["sun_2","دال مکس یا دال مونگ","ہلکی دال","🥣"],["sun_3","چنا پلاؤ یا مٹر پلاؤ","پلاؤ ورائٹی","🍚"],["sun_4","قیمہ پلاؤ یا آلو چکن چاول","چاول اسپیشل","🍛"]]}
+];
+const STORAGE_KEY="urdu_food_planner_state_v2";
+const emptyState=()=>({version:2,weeks:{},history:[]});
+let state=emptyState(), activeDay="mon", pendingDish=null, resetTarget="day";
+const dayKeys=["sun","mon","tue","wed","thu","fri","sat"];
+const todayId=()=>dayKeys[new Date().getDay()];
+function weekKey(date=new Date()){
+ const d=new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
+ const day=d.getUTCDay()||7; d.setUTCDate(d.getUTCDate()+4-day);
+ const yearStart=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+ const week=Math.ceil((((d-yearStart)/86400000)+1)/7);
+ return `${d.getUTCFullYear()}-W${String(week).padStart(2,"0")}`;
+}
+function currentWeek(){const key=weekKey(); if(!state.weeks[key]) state.weeks[key]={}; for(const d of MENU) if(!Array.isArray(state.weeks[key][d.id])) state.weeks[key][d.id]=[]; return state.weeks[key]}
+function cooked(dayId){return currentWeek()[dayId]||[]}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){toast("ڈیٹا محفوظ نہیں ہو سکا؛ بیک اپ بنائیں")}}
+function load(){
+ try{
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(raw){const parsed=JSON.parse(raw); if(parsed&&parsed.version===2&&parsed.weeks&&Array.isArray(parsed.history)) state=parsed;
+   else if(parsed&&typeof parsed==="object"){ // migrate previous v1 day-only state into current week
+    state=emptyState(); const wk=currentWeek();
+    for(const d of MENU){const old=Array.isArray(parsed[d.id])?parsed[d.id]:[]; wk[d.id]=old.filter(id=>d.options.some(o=>o[0]===id));}
+    state.history.push({type:"migration",date:new Date().toISOString(),note:"پرانا ریکارڈ نئے نظام میں منتقل کیا گیا"});
+   }
+  }
+ }catch(e){state=emptyState()}
+ currentWeek();
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2600)}
+function showModal(id){document.getElementById(id).classList.add("show")}
+function hideModal(id){document.getElementById(id).classList.remove("show")}
+function render(){
+ const day=MENU.find(d=>d.id===activeDay); const done=cooked(activeDay);
+ document.getElementById("dayName").textContent=day.name;
+ document.getElementById("dayTheme").textContent=day.theme;
+ document.getElementById("dayBadge").textContent=activeDay===todayId()?"آج":"منتخب دن";
+ const left=day.options.filter(o=>!done.includes(o[0]));
+ document.getElementById("remaining").textContent=`${left.length} / ${day.options.length}`;
+ document.getElementById("daysNav").innerHTML=MENU.map(d=>{
+  const n=d.options.length-cooked(d.id).length;
+  return `<button class="day-pill ${d.id===activeDay?"active":""}" data-day="${d.id}">${d.name}<span class="count">${n}</span></button>`;
+ }).join("");
+ document.getElementById("options").innerHTML=left.map(o=>`<article class="dish"><div class="dish-main"><div class="dish-icon">${o[3]}</div><div><h3>${esc(o[1])}${o[4]?'<span class="mandatory">لازمی</span>':""}</h3><small>${esc(o[2])}</small></div></div><button class="cook" data-cook="${o[0]}">✓ پکا لیا</button></article>`).join("");
+ document.getElementById("doneCard").classList.toggle("show",left.length===0);
+}
+function markCooked(id){
+ const day=MENU.find(d=>d.id===activeDay), dish=day.options.find(o=>o[0]===id); if(!dish)return;
+ const list=cooked(activeDay); if(list.includes(id))return;
+ list.push(id);
+ state.history.unshift({id,dayId:activeDay,title:dish[1],date:new Date().toISOString(),week:weekKey()});
+ save();hideModal("confirmModal");pendingDish=null;render();toast("ڈش ہسٹری میں محفوظ ہو گئی");
+}
+function renderHistory(){
+ const el=document.getElementById("historyList");
+ if(!state.history.length){el.innerHTML='<p class="muted" style="text-align:center;padding:24px">ابھی تک کوئی ڈش ہسٹری میں موجود نہیں۔</p>';return}
+ el.innerHTML=state.history.filter(x=>x.type!=="migration").map(x=>`<div class="history-day"><strong>${esc(x.title||"ریکارڈ")}</strong><div class="muted">${esc(x.dayId?MENU.find(d=>d.id===x.dayId)?.name||"": "")} · ${new Date(x.date).toLocaleString("ur-PK",{dateStyle:"medium",timeStyle:"short"})} · ${esc(x.week||"")}</div><div style="text-align:left"><button class="link" data-undo="${esc(x.id)}" data-date="${esc(x.date)}">واپس کریں (Undo)</button></div></div>`).join("");
+}
+function renderWeek(){
+ document.getElementById("weekList").innerHTML=MENU.map(d=>{
+  const list=cooked(d.id), left=d.options.filter(o=>!list.includes(o[0]));
+  return `<div class="week-day"><strong>${d.name} — ${left.length} باقی</strong><p>دسترس: ${left.map(o=>esc(o[1])).join("، ")||"اس ہفتے کے تمام آپشنز استعمال ہو گئے"}</p></div>`;
+ }).join("")+`<p class="muted">موجودہ ہفتہ: ${weekKey()}</p>`;
+}
+function resetDay(){resetTarget="day";document.getElementById("resetText").textContent=`کیا آپ ${MENU.find(d=>d.id===activeDay).name} کا موجودہ ہفتے والا ریکارڈ ختم کرنا چاہتے ہیں؟`;showModal("resetModal")}
+function resetAll(){resetTarget="all";document.getElementById("resetText").textContent="کیا آپ موجودہ ہفتے کے تمام دنوں کا ریکارڈ ختم کرنا چاہتے ہیں؟ پرانی ہسٹری محفوظ رہے گی۔";showModal("resetModal")}
+function doReset(){
+ const wk=currentWeek();
+ if(resetTarget==="day"){wk[activeDay]=[];state.history=state.history.filter(x=>!(x.week===weekKey()&&x.dayId===activeDay));}
+ else{for(const d of MENU)wk[d.id]=[];state.history=state.history.filter(x=>x.week!==weekKey());}
+ save();hideModal("resetModal");render();toast("موجودہ ہفتے کا مینو ری سیٹ ہو گیا");
+}
+function undoRecord(id,date){
+ const recordIndex=state.history.findIndex(x=>x.id===id&&x.date===date); if(recordIndex<0)return;
+ const rec=state.history[recordIndex]; state.history.splice(recordIndex,1);
+ if(rec.week&&state.weeks[rec.week]&&Array.isArray(state.weeks[rec.week][rec.dayId])) state.weeks[rec.week][rec.dayId]=state.weeks[rec.week][rec.dayId].filter(x=>x!==rec.id);
+ save();render();renderHistory();toast("ڈش دوبارہ دستیاب کر دی گئی");
+}
+function exportBackup(){
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`khana-planner-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);toast("بیک اپ فائل تیار ہے");
+}
+function importBackup(file){
+ const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||data.version!==2||!data.weeks||!Array.isArray(data.history))throw Error("invalid");state=data;currentWeek();save();render();hideModal("backupModal");toast("بیک اپ بحال ہو گیا")}catch(e){toast("یہ درست بیک اپ فائل نہیں ہے")}};reader.readAsText(file);
+}
+document.addEventListener("click",e=>{
+ const day=e.target.closest("[data-day]");if(day){activeDay=day.dataset.day;render();return}
+ const cook=e.target.closest("[data-cook]");if(cook){pendingDish=cook.dataset.cook;const d=MENU.find(x=>x.id===activeDay).options.find(x=>x[0]===pendingDish);document.getElementById("confirmDish").textContent=d[1];showModal("confirmModal");return}
+ const close=e.target.closest("[data-close]");if(close){hideModal(close.dataset.close);return}
+ const undo=e.target.closest("[data-undo]");if(undo){undoRecord(undo.dataset.undo,undo.dataset.date);return}
+});
+document.getElementById("confirmCook").addEventListener("click",()=>{if(pendingDish)markCooked(pendingDish)});
+document.getElementById("resetDay").addEventListener("click",resetDay);
+document.getElementById("resetWeekBtn").addEventListener("click",()=>{hideModal("weekModal");resetAll()});
+document.getElementById("doneReset").addEventListener("click",resetDay);
+document.getElementById("confirmReset").addEventListener("click",doReset);
+document.getElementById("historyTop").addEventListener("click",()=>{renderHistory();showModal("historyModal")});
+document.getElementById("historyTab").addEventListener("click",()=>{renderHistory();showModal("historyModal")});
+document.getElementById("weekTab").addEventListener("click",()=>{renderWeek();showModal("weekModal")});
+document.getElementById("todayTab").addEventListener("click",()=>{activeDay=todayId();render();document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.getElementById("todayTab").classList.add("active")});
+document.getElementById("backupTab").addEventListener("click",()=>showModal("backupModal"));
+document.getElementById("exportBtn").addEventListener("click",exportBackup);
+document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change",e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value=""});
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active")}));
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+activeDay=todayId();load();render();
+
+let installPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installPrompt=e;document.getElementById("installBtn").hidden=false});
+document.getElementById("installBtn").addEventListener("click",async()=>{if(!installPrompt){toast("براؤزر کے مینو سے Install app منتخب کریں");return}installPrompt.prompt();const result=await installPrompt.userChoice;if(result.outcome==="accepted")toast("ایپ انسٹال ہو رہی ہے");installPrompt=null;document.getElementById("installBtn").hidden=true});
+window.addEventListener("appinstalled",()=>{toast("ایپ کامیابی سے انسٹال ہو گئی");document.getElementById("installBtn").hidden=true});
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){
+ window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>toast("آف لائن سروس رجسٹر نہیں ہو سکی")));
+}
+</script>
+</body>
+</html>
